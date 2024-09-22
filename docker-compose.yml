@@ -1,0 +1,43 @@
+version: '2.1'
+
+services:
+  server-mysql:
+    image: mysql:8.0
+#    build: ./mysql
+    container_name: server-mysql-8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_MYSQL}
+      MYSQL_USER: ${USER_MYSQL}
+      MYSQL_PASSWORD: ${USER_PASSWORD}
+      TZ: ${FUSO}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./backups:/backups
+    networks:
+      - dockernet
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+#    build: ./phpmyadmin
+    container_name: server-phpmyadmin
+    environment:
+      PMA_HOST: server-mysql
+      PMA_PORT: 3306
+      UPLOAD_LIMIT:  ${DEFINE_UPLOAD_LIMIT}
+      PMA_UPLOAD_LIMIT: ${DEFINE_UPLOAD_LIMIT}
+      PMA_ARBITRARY: 1
+      TZ: ${FUSO}
+    ports:
+      - "8080:80"
+    networks:
+      - dockernet
+# Comando para criar a rede (dockernet) -> docker network create --subnet=10.0.0.0/8 dockernet
+
+networks:
+  dockernet:
+    external: true
+
+volumes:
+  mysql:
