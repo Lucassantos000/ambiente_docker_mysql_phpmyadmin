@@ -1,8 +1,7 @@
 services:
-  server-mysql:
+  mysql:
     image: mysql:8.0
-#    build: ./mysql
-    container_name: server-mysql-8.0
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_MYSQL}
@@ -19,9 +18,9 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
 #    build: ./phpmyadmin
-    container_name: server-phpmyadmin
+    container_name: phpmyadmin
     environment:
-      PMA_HOST: server-mysql
+      PMA_HOST: mysql
       PMA_PORT: 3306
       UPLOAD_LIMIT:  ${DEFINE_UPLOAD_LIMIT}
       PMA_UPLOAD_LIMIT: ${DEFINE_UPLOAD_LIMIT}
@@ -29,6 +28,8 @@ services:
       TZ: ${FUSO}
     ports:
       - "8080:80"
+    depends_on:
+      - mysql
     networks:
       - dockernet
 # Comando para criar a rede (dockernet) -> docker network create --subnet=10.0.0.0/8 dockernet

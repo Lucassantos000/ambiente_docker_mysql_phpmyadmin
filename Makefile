@@ -1,8 +1,8 @@
 # Arquivo de configuração do Makefile
 
 #Definição de variáveis
-ContainerNameMysql = server-mysql-8.0
-ContainerNamePhpMyAdmin = server-phpmyadmin
+ContainerNameMysql = mysql
+ContainerNamePhpMyAdmin = phpmyadmin
 
 # Comandos
 
