@@ -7,7 +7,7 @@ ContainerNamePhpMyAdmin = server-phpmyadmin
 # Comandos
 
 up:
-	docker-compose up -d
+	docker compose up -d
 	docker cp ./scripts $(ContainerNameMysql):/
 	docker exec -it $(ContainerNameMysql) bash -c "chmod +x /scripts/start.sh"
 	docker exec -it $(ContainerNameMysql) bash -c "chmod +x /scripts/createBackupBancos.sh"
@@ -15,16 +15,19 @@ up:
 	docker exec -it $(ContainerNameMysql) bash -c "/scripts/createBackupBancos.sh"
 
 down:
-	docker-compose down
+	docker compose down
 
 restart:
-	docker-compose restart
+	docker compose restart
 
-logs:
-	docker-compose logs -f 
+logs-mysql:
+	docker logs -f $(ContainerNameMysql) 
+
+logs-phpmyadmin:
+	docker logs -f $(ContainerNamePhpMyAdmin)
 
 ps:
-	docker-compose ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
+	docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
 	
 # Este Comando é utilizado para criar uma imagem a partir de um container
 commit:
@@ -41,3 +44,8 @@ bash:
 
 bash-phpmyadmin:
 	docker exec -it $(ContainerNamePhpMyAdmin) bash
+
+clear:
+	docker rm $(ContainerNameMysql)
+	docker rm $(ContainerNamePhpMyAdmin)
+	
